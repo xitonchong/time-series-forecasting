@@ -15,3 +15,4 @@ we can plot the partial autocorrelation function to determine the order of a sta
  - if the ACF plot of a stationary process shows a slow decay, then you likely have an autoregressive prces.s 
  0 the partial autoregressve measures the correlation between two lagged values of a times series when you remove the ffect of the other autocorrelated lagged values. 
  - plotting the PACF of a stationary autoregressive process will show the order o of the process. the coefficients will be significant up until lag p only. 
+ 

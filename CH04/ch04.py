@@ -250,3 +250,5 @@ from sklearn.metrics import mean_absolute_error
 mae_MA_undiff = mean_absolute_error(df['widget_sales'].iloc[450:], 
                          df['pred_widget_sales'].iloc[450:])
 print(mae_MA_undiff)
+
+# %%

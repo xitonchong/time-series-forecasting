@@ -294,3 +294,4 @@ ax.set_ylabel('Value')
 plt.tight_layout()
 
 plt.savefig('figures/CH03_F19_peixeiro.png', dpi=300)
+# %%

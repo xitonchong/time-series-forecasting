@@ -240,3 +240,11 @@ plt.xticks([936, 988], [2018, 2019])
 fig.autofmt_xdate() 
 plt.tight_layout() 
 
+
+# %%
+from sklearn.metrics import mean_absolute_error
+
+mae_AR_undiff = mean_absolute_error(df['foot_traffic'][948:], df['pred_foot_traffic'][948:])
+
+print(mae_AR_undiff)
+# %%

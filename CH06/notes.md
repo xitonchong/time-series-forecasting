@@ -43,3 +43,12 @@ If the original data has an Int64Index, a new RangeIndex will be created for the
 
 > Autocorrelation: correlation between the elements of a series and others from the same series separated from them by a given interval.
 Autocorrelation, sometimes known as serial correlation in the discrete time case, is the correlation of a signal with a delayed copy of itself as a function of delay.
+
+
+## Ljung-Box test
+is a statistical test that determines whether the autocorrelation of a group of datta is significantly different from 0. 
+
+In time series forecasting, we apply the Ljung-Box test on the model's residuals to test whether they are similar to white noise.  The null hypothesis states that the data is independently distributed, meaning that there is no autocorrelation. If the p-value is larger than 0.05, wwe cannot reject the null hypothesis, meaning that the residuals are independently distributed.  Therefore, there is no autocorrelation, the residuals are similar to white noise, and the model can be used for forecasting. 
+
+if p-value is less than 0.05, we reject the null hypothesis, meaning that our residuals are not independently distributed and are correlated. The model cannot be used for forecasting. 
+

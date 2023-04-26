@@ -7,7 +7,7 @@ from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 from statsmodels.tsa.arima_process import ArmaProcess 
 from statsmodels.tsa.stattools import adfuller
-from tqdm import tqdm 
+from tqdm import tqdm
 from itertools import product 
 
 
@@ -219,7 +219,7 @@ def optimize_ARMA(endog: Union[pd.Series, list], order_list: list) -> pd.DataFra
     
     results = []
     
-    for order in tqdm_notebook(order_list):
+    for order in tqdm(order_list):
         try: 
             model = SARIMAX(endog, order=(order[0], 0, order[1]), simple_differencing=False).fit(disp=False)
         except:
@@ -310,6 +310,7 @@ test.loc[:, 'pred_last_value'] = pred_last_value
 test.loc[:, 'pred_ARMA'] = pred_ARMA
 
 test.head()
+# %%
 fig, ax = plt.subplots()
 
 ax.plot(df_diff['bandwidth_diff'])
@@ -335,4 +336,61 @@ fig.autofmt_xdate()
 plt.tight_layout()
 
 plt.savefig('figures/CH06_F20_peixeiro.png', dpi=300)
+# %%
+mse_mean = mean_squared_error(test['bandwidth_diff'], test['pred_mean'])
+mse_last = mean_squared_error(test['bandwidth_diff'], test['pred_last_value'])
+mse_ARMA = mean_squared_error(test['bandwidth_diff'], test['pred_ARMA'])
+
+print(mse_mean, mse_last, mse_ARMA)
+# %%f
+# 
+fig, ax = plt.subplots()
+
+x = ['mean', 'last_value', 'ARMA(2,2)']
+y = [mse_mean, mse_last, mse_ARMA] 
+
+ax.bar(x, y, width=0.4)
+ax.set_xlabel('Methods')
+ax.set_ylabel('MSE')
+ax.set_ylim(0, 7)
+
+for index, value in enumerate(y):
+    plt.text(x=index, y=value+0.25, s=str(round(value, 2)), ha='center')
+
+plt.tight_layout()
+
+
+# %%
+df['pred_bandwidth'] = pd.Series()
+df['pred_bandwidth'][9832:] = df['hourly_bandwidth'].iloc[9832] + test['pred_ARMA'].cumsum()
+# %%
+
+
+fig, ax = plt.subplots()
+
+ax.plot(df['hourly_bandwidth'])
+ax.plot(df['hourly_bandwidth'], 'b-', label='actual')
+ax.plot(df['pred_bandwidth'], 'k--', label='ARMA(2,2)')
+
+ax.legend(loc=2)
+
+ax.set_xlabel('Time')
+ax.set_ylabel('Hourly bandwith usage (MBps)')
+
+ax.axvspan(9831, 10000, color='#808080', alpha=0.2)
+
+ax.set_xlim(9800, 9999)
+
+plt.xticks(
+    [9802, 9850, 9898, 9946, 9994],
+    ['2020-02-13', '2020-02-15', '2020-02-17', '2020-02-19', '2020-02-21'])
+
+fig.autofmt_xdate()
+plt.tight_layout()
+
+plt.savefig('figures/CH06_F21_peixeiro.png', dpi=300)
+# %%
+mae_ARMA_undiff = mean_absolute_error(df['hourly_bandwidth'][9832:], df['pred_bandwidth'][9832:])
+
+print(mae_ARMA_undiff)
 # %%
